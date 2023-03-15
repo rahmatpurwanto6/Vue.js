@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handling Event</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- listening -->
+    <div id="example-1">
+        <button v-on:click="counter += 1">Add 1</button>
+        <p>The button above has been clicked {{ counter }} times.</p>
+    </div>
+    <!-- method event handler -->
+    <div id="example-2">
+        <!-- `greet` is the name of a method defined below -->
+        <button v-on:click="greet">Greet</button>
+    </div>
+    <!-- method inline handler -->
+    <div id="example-3">
+        <button v-on:click="say('hi')">Say hi</button>
+        <button v-on:click="say('what')">Say what</button>
+    </div>
+
+    <div id="example-4">
+        <button v-on:click="warn('Form cannot be submitted yet.', $event)">
+            Submit
+        </button>
+    </div>
+
+    <div id="example-5">
+        <a v-on:click.stop="doThis">Click me!</a>
+    </div>
+
+    <div id="example-6">
+        <form v-on:submit.prevent="onSubmit">
+            <input type="text" v-model="inputText">
+            <button type="submit">Kirim</button>
+        </form>
+    </div>
+
+    <div id="example-7">
+        <a v-on:click.stop.prevent="doThat">Follow me.</a>
+    </div>
+    <br>
+
+
+    <div id="example-8">
+        <form v-on:submit.prevent>
+            <input type="text" v-model="inputText">
+            <button type="submit">Click here!</button>
+        </form>
+    </div>
+
+    <div id="example-9" v-on:click.capture="doThis">
+        <div>
+            <p v-for="user in users">Click and say to {{ user.name }}</p>
+        </div>
+    </div>
+
+    <div id="example-10" v-on:click.self="doThat">
+        <a v-for="user in item">hi, {{ user.name }}</a>
+    </div>
+
+    <div id="example-11">
+        <input v-on:keyup.enter="submit" v-model="message">
+    </div>
+
+    <script>
+        // listening
+        var example1 = new Vue({
+                el: '#example-1',
+                data: {
+                    counter: 0
+                }
+            })
+            // method event handler
+        var example2 = new Vue({
+            el: '#example-2',
+            data: {
+                name: 'Vue.js'
+            },
+            // define methods under the `methods` object
+            methods: {
+                greet: function(event) {
+                    // `this` inside methods points to the Vue instance
+                    alert('Hello ' + this.name + '!')
+                        // `event` is the native DOM event
+                    if (event) {
+                        alert(event.target.tagName)
+                    }
+                }
+            }
+        })
+
+        // you can invoke methods in JavaScript too
+        example2.greet() // => 'Hello Vue.js!'
+            // method inline handler
+        new Vue({
+            el: '#example-3',
+            methods: {
+                say: function(message) {
+                    alert(message)
+                }
+            }
+        })
+
+        new Vue({
+            el: '#example-4',
+            methods: {
+                warn: function(message, event) {
+                    // now we have access to the native event
+                    if (event) {
+                        event.preventDefault()
+                    }
+                    alert(message)
+                }
+            }
+        })
+
+        var example5 = new Vue({
+            el: '#example-5',
+            methods: {
+                doThis() {
+                    console.log('Event click pada elemen a dihentikan dan doThis() dieksekusi.');
+                }
+            }
+        })
+
+        let example6 = new Vue({
+            el: '#example-6',
+            data() {
+                return {
+                    inputText: ''
+                }
+            },
+            methods: {
+                onSubmit() {
+                    console.log('Form di-submit dan input:', this.inputText);
+                    // Lakukan sesuatu di sini
+                }
+            }
+        })
+
+        let example7 = new Vue({
+            el: '#example-7',
+            methods: {
+                doThat() {
+                    console.log('Event click pada elemen a dihentikan dan perilaku default dari event click dihentikan, dan doThat() dieksekusi.');
+                    // Lakukan sesuatu di sini
+                }
+            }
+        })
+
+        const example8 = new Vue({
+            el: '#example-8',
+            data() {
+                return {
+                    inputText: '',
+                }
+                // alert('Form di-submit dan input:', this.inputText)
+            }
+        })
+
+        let example9 = new Vue({
+            el: '#example-9',
+            data: {
+                users: [{
+                    name: 'Sabrina'
+                }]
+            },
+            methods: {
+                doThis() {
+                    alert('Hello Sabrina!')
+                        // Lakukan sesuatu di sini
+                }
+            }
+        })
+
+        var example10 = new Vue({
+            el: '#example-10',
+            data: {
+                item: [{
+                    name: 'Lydia'
+                }]
+            },
+            methods: {
+                doThat() {
+                    alert('Hello Lydia!')
+                        // Lakukan sesuatu di sini
+                }
+            }
+        })
+
+        var example11 = new Vue({
+            el: '#example-11',
+            data() {
+                return {
+                    message: ''
+                }
+            },
+            methods: {
+                submit() {
+                    alert(this.message);
+                    // Lakukan sesuatu di sini
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
